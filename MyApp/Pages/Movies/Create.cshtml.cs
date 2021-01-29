@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Marten;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyApp.Data;
 using MyApp.Models;
@@ -10,17 +11,22 @@ namespace MyApp.Pages.Movies
         [BindProperty]
         public Movie Movie { get; set; }
 
-        private readonly AppDbContext _db;
+        private readonly IDocumentStore _store;
 
-        public CreateModel(AppDbContext db)
+        public CreateModel(IDocumentStore store)
         {
-            _db = db;
+            _store = store;
         }
 
         public IActionResult OnPost()
         {
-            _db.Movies.Add(Movie);
-            _db.SaveChanges();
+
+            //var store = DocumentStore
+            //    .For("Host=localhost;Database=testdb01;Username=postgres;Password=WF62bjmwEQXMF8fM");
+
+            using var session = _store.LightweightSession();
+            session.Store(Movie);
+            session.SaveChanges();
 
             return RedirectToPage("Index");
         }

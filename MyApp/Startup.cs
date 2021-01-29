@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Marten;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,18 +21,35 @@ namespace MyApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite("Data Source=app.sqlite");
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                options.LogTo(Console.WriteLine);
-            });
+            var options = BuildStoreOptions();
+
+            services.AddMarten(options);
 
             services.AddControllers();
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
 
+        }
+
+
+
+        private StoreOptions BuildStoreOptions()
+        {
+            var connectionString = Configuration.GetConnectionString("Marten");
+
+            // Or lastly, build a StoreOptions object yourself
+            var options = new StoreOptions();
+            options.Connection(connectionString);
+
+            // Use the more permissive schema auto create behavior
+            // while in development
+            //  if (Hosting.IsDevelopment())
+            //{
+            options.AutoCreateSchemaObjects = AutoCreate.All;
+            //}
+
+            return options;
         }
 
 
