@@ -38,16 +38,9 @@ namespace MyApp
         {
             var connectionString = Configuration.GetConnectionString("Marten");
 
-            // Or lastly, build a StoreOptions object yourself
             var options = new StoreOptions();
-            options.Connection(connectionString);
-
-            // Use the more permissive schema auto create behavior
-            // while in development
-            //  if (Hosting.IsDevelopment())
-            //{
+            options.Connection(connectionString);      
             options.AutoCreateSchemaObjects = AutoCreate.All;
-            //}
 
             return options;
         }
