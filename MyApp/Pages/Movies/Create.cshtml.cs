@@ -20,10 +20,6 @@ namespace MyApp.Pages.Movies
 
         public IActionResult OnPost()
         {
-
-            //var store = DocumentStore
-            //    .For("Host=localhost;Database=testdb01;Username=postgres;Password=WF62bjmwEQXMF8fM");
-
             using var session = _store.LightweightSession();
             session.Store(Movie);
             session.SaveChanges();
