@@ -1,7 +1,6 @@
 ﻿using Marten;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyApp.Data;
 using MyApp.Models;
 
 namespace MyApp.Pages.Movies
