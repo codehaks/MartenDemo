@@ -1,6 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using MyApp.Application.Movies;
 using MyApp.Data;
 using MyApp.Models;
 
@@ -8,17 +14,22 @@ namespace MyApp.Pages.Movies
 {
     public class IndexModel : PageModel
     {
-        private readonly AppDbContext _db;
 
-        public IndexModel(AppDbContext db)
+        private IMediator _mediator;
+
+        public IndexModel(IMediator mediator)
         {
-            _db = db;
+            _mediator = mediator;
         }
 
         public IList<Movie> MovieList { get; set; }
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            MovieList = _db.Movies.ToList();
+            var response = await _mediator.Send(new Query.Request());
+            MovieList = response.MovieList;
+            return Page();
         }
+
+      
     }
 }

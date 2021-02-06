@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ namespace MyApp
             });
 
             services.AddControllers();
+            services.AddMediatR(typeof(Startup));
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
