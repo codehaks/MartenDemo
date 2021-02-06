@@ -31,6 +31,7 @@
                 <td>@movie.Name</td>
                 <td>@movie.Year</td>
                 <td>
+                    <a class="btn btn-outline-primary" asp-page="details" asp-route-id="@movie.Id">Details</a>
                     <a class="btn btn-outline-secondary" asp-page="edit" asp-route-id="@movie.Id">Edit</a>
                     <a class="btn btn-outline-danger" asp-page="delete" asp-route-id="@movie.Id">Delete</a>
                 </td>
