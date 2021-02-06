@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyApp.Application.Movies;
 using MyApp.Data;
 using System;
+using System.Reflection;
 
 namespace MyApp
 {
@@ -28,6 +31,7 @@ namespace MyApp
             });
 
             services.AddControllers();
+            services.AddMediatR(typeof(Create).GetTypeInfo().Assembly);
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();

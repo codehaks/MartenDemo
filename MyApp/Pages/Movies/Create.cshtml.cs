@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyApp.Application.Movies;
 using MyApp.Data;
 using MyApp.Models;
+using System.Threading.Tasks;
 
 namespace MyApp.Pages.Movies
 {
@@ -10,17 +13,23 @@ namespace MyApp.Pages.Movies
         [BindProperty]
         public Movie Movie { get; set; }
 
-        private readonly AppDbContext _db;
+        private readonly IMediator _mediator;
 
-        public CreateModel(AppDbContext db)
+        public CreateModel(IMediator mediator)
         {
-            _db = db;
+            _mediator = mediator;
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            _db.Movies.Add(Movie);
-            _db.SaveChanges();
+
+            var respose=await _mediator.Send(new Create.Command
+            {
+                Name = Movie.Name,
+                Year = Movie.Year
+            });
+
+            ViewData["id"] = respose.Id;
 
             return RedirectToPage("Index");
         }
