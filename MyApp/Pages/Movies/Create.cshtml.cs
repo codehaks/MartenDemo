@@ -1,26 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyApp.Application.Movies;
 using MyApp.Data;
 using MyApp.Models;
+using System.Threading.Tasks;
 
 namespace MyApp.Pages.Movies
 {
     public class CreateModel : PageModel
     {
+        private readonly IMediator _mediator;
+
+        public CreateModel(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [BindProperty]
         public Movie Movie { get; set; }
 
-        private readonly AppDbContext _db;
+       
 
-        public CreateModel(AppDbContext db)
+        public async Task<IActionResult> OnPost()
         {
-            _db = db;
-        }
+            var response= await _mediator.Send(new CreateCommand.Request
+            {
+                Movie=Movie
+            });
 
-        public IActionResult OnPost()
-        {
-            _db.Movies.Add(Movie);
-            _db.SaveChanges();
+            TempData["id"] = response.Id;
 
             return RedirectToPage("Index");
         }

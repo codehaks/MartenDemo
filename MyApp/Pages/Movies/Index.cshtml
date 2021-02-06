@@ -9,6 +9,10 @@
 
 <a class="btn btn-outline-primary m-2" asp-page="Create">Create New</a>
 
+@if (TempData["id"] is not null)
+{
+<span class="alert alert-info"> Movie created : @TempData["id"]</span>
+}
 
 <table class="table">
     <thead>

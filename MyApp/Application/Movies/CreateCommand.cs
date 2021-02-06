@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MyApp.Data;
 using MyApp.Models;
 using System;
@@ -10,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace MyApp.Application.Movies
 {
-    public class Query
+    public class CreateCommand
     {
         public class Request : IRequest<Response>
         {
-
+            public Movie Movie { get; set; }
         }
+
         public class Handler : IRequestHandler<Request, Response>
         {
             private readonly AppDbContext _db;
@@ -27,17 +27,17 @@ namespace MyApp.Application.Movies
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var model = await _db.Movies.ToListAsync(cancellationToken);
+                var model = _db.Add(request.Movie);
+                await _db.SaveChangesAsync();
                 return new Response
                 {
-                    MovieList = model
+                    Id = model.Entity.Id
                 };
-
             }
         }
         public class Response
         {
-            public IList<Movie> MovieList { get; set; }
+            public int Id { get; set; }
         }
     }
 }

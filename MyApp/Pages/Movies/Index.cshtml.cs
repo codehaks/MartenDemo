@@ -25,7 +25,7 @@ namespace MyApp.Pages.Movies
         public IList<Movie> MovieList { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            var response = await _mediator.Send(new Query.Request());
+            var response = await _mediator.Send(new IndexQuery.Request());
             MovieList = response.MovieList;
             return Page();
         }
