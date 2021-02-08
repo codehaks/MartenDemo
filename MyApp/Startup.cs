@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyApp.Application.Common;
+using MyApp.Application.Movies;
 using MyApp.Data;
 using System;
 
@@ -25,11 +27,12 @@ namespace MyApp
             {
                 options.UseSqlite("Data Source=app.sqlite");
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                options.LogTo(Console.WriteLine);
+                options.LogTo(Console.WriteLine,Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
+            services.AddTransient(typeof(IPipelineBehavior<FindQuery.Request, FindQuery.Response>), typeof(LoggingBehavior<FindQuery.Request, FindQuery.Response>));
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
