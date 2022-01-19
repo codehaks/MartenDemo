@@ -33,7 +33,7 @@ namespace MyApp
 
             services.AddControllers();
             services.AddMediatR(typeof(Create).GetTypeInfo().Assembly);
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
